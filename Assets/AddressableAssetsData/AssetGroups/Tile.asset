@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Tile
+  m_EditorClassIdentifier: 
+  m_GroupName: Tile
+  m_GUID: af0fed53d08f5eb40a923bb07e15c15d
+  m_SerializeEntries:
+  - m_GUID: 1215746cf5622b84cb0c263b5aa35c80
+    m_Address: Ground
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44bb7ec2b3eeea0429203a30faf80004
+    m_Address: Road
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 4beb07068b3258b4ebe2d98efa9ef9fb, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6e9663563435c8f418c1576ca2e9499d, type: 2}
+    - {fileID: 11400000, guid: a8f373ee814a0c74ca43ec6b314feaa5, type: 2}
