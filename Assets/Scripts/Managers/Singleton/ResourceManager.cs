@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -17,6 +18,12 @@ namespace Paradise
         public void LoadScene(string sceneAddress)
         {
             Addressables.LoadSceneAsync(sceneAddress).Completed += _OnSceneLoaded;
+        }
+
+        // 수정
+        public void LoadAssetsAsync<T>(string key, Action<T> onLoadCompleted)
+        {
+            //Addressables.LoadAssetsAsync<T>(key, onLoadCompleted);
         }
 
         // 씬 로드 완료 콜백

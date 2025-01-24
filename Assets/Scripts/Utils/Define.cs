@@ -30,4 +30,20 @@ namespace Paradise
         // 노말 Normal,
         // 물리 Physical,
     }
+
+    public enum InGameSpeed
+    {
+        Normal,
+        Half,
+        Double
+    }
+
+    public struct TileName
+    {
+        public const string Ground = "Ground";
+        public const string Road = "Road";
+        public const string Obstacle = "Obstacle";
+        public const string Gold = "Gold";
+        public const string Sliver = "Sliver";
+    }
 }

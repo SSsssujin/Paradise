@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 namespace Paradise
 {
+    public delegate void TouchHandler();
+
     [RequireComponent(typeof(PlayerInput))]
     public class TouchDetector : MonoBehaviour
     {
@@ -19,25 +21,25 @@ namespace Paradise
             _playerInput = gameObject.FetchComponent<PlayerInput>();
 
             // Listener
-            _playerInput.onActionTriggered += onActionTriggered;
+            _playerInput.onActionTriggered += inputActionTriggered;
         }
             
-        private void onActionTriggered(InputAction.CallbackContext context)
+        private void inputActionTriggered(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
                 Vector2 touchPosition = Utils.GetTouchPosition();
-                Vector3 touchedScreenPoint = _camera.ScreenToWorldPoint(touchPosition);
-                touchedScreenPoint.z = 0;
+                Vector2 touchedScreenPoint = _camera.ScreenToWorldPoint(touchPosition);
 
-                RaycastHit2D hit = Physics2D.Raycast(touchedScreenPoint, 
-                    _camera.transform.forward, 
+                RaycastHit2D hit = Physics2D.Raycast(touchedScreenPoint,
+                    _camera.transform.forward,
                     Mathf.Infinity,
-                    layerMask:_targetLayers);
+                    layerMask: _targetLayers);
 
+                // 수정?
                 if (hit.collider != null)
                 {
-                    if (hit.collider.TryGetComponent<MapTile>(out var tile))
+                    if (hit.collider.TryGetComponent<Battle.MapTile>(out var tile))
                     {
                         tile.Selected();
                     }
@@ -47,7 +49,7 @@ namespace Paradise
 
         private void OnDestroy()
         {
-            _playerInput.onActionTriggered -= onActionTriggered;
+            _playerInput.onActionTriggered -= inputActionTriggered;
         }
     }
 }
