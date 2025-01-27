@@ -25,5 +25,12 @@ namespace Paradise
             origin.TryGetComponent(out T component);
             return component;
         }
+        
+        public static void ResetLocal(this Transform origin)
+        {
+            origin.localPosition = Vector3.zero;
+            origin.localRotation = Quaternion.identity;
+            origin.localScale = Vector3.one;
+        }
     }
 }

@@ -37,6 +37,17 @@ namespace Paradise
         Half,
         Double
     }
+    
+    public enum UIEvent
+    {
+        Click,
+        Pressed,
+        PointerDown,
+        PointerUp,
+        BeginDrag,
+        Drag,
+        EndDrag,
+    }
 
     public struct TileName
     {

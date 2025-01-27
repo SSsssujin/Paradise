@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d67d85df75e7c4a91a3a4294c793f4, type: 3}
+  m_Name: WeDay
+  m_EditorClassIdentifier: 
+  _name: "\uC704\uB370\uC774"
+  _description: "\uB9C8\uC774\uB370\uC774\uAC00 \uC6B0\uB9AC\uB85C \uC9C4\uD654\uD588\uB2E4."
+  _price: 0
+  _hp: 0
+  _attackPower: 0
+  _attackRange: 3
+  _attackSpeed: 1
+  _element: 3
+  _starRank: 0
+  _portrait: {fileID: 21300000, guid: 912f2333824ee3946814a450e92ab11a, type: 3}
+  _model: {fileID: 0}
+  _skillKey: "\uC704\uB370\uC774"
+  _passiveSkillIcon: {fileID: 21300000, guid: 1458237dbb3c6d54f8fe9d39c0175d00, type: 3}
+  _passiveSkillDescription: "\uC704\uB370\uC774\uC758 \uD328\uC2DC\uBE0C \uC2A4\uD0AC"
+  _activeSkillIcon: {fileID: 21300000, guid: 0f182fb2863faa7449e020de33b77e68, type: 3}
+  _activeSkillDescription: "\uC561\uD2F0\uBE0C \uC2A4\uD0AC"
