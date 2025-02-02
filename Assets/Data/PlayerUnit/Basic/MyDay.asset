@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5eb3bf296833d42a9a5283efb932b7, type: 3}
+  m_Name: MyDay
+  m_EditorClassIdentifier: 
+  _name: "\uB9C8\uC774\uB370\uC774"
+  _description: "\uC2A4\uD0C0\uB808\uC77C \uBCA0\uACBC\uC74C"
+  _cost: 0
+  _hp: 100
+  _attackPower: 10
+  _attackRange: 3
+  _attackSpeed: 5
+  _element: 1
+  _starRank: 0
+  _portrait: {fileID: -8806903486094172207, guid: c9eb46fd069fa9c408582b523bfffc88, type: 3}
+  _model: {fileID: 0}
+  _skillKey: "\uB9C8\uC774\uB370\uC774"
+  _passiveSkillIcon: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
+  _passiveSkillDescription: "\uB9C8\uC774\uB370\uC774\uAC00 \uACF5\uACA9\uD55C \uC801\uC740
+    3\uCD08 \uB3D9\uC548 \uC9C0\uC18D\uC801\uC73C\uB85C \uD654\uC0C1\uC744 \uC785\uC73C\uBA70
+    \uB9E4\uCD08 \uD53C\uD574\uB97C \uBC1B\uB294\uB2E4."

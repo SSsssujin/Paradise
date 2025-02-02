@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Paradise.Data.Unit
 {
-    [CreateAssetMenu(fileName = "Hero", menuName = "ScriptableObjects/Unit/Hero", order = 1)]
+    [CreateAssetMenu(fileName = "Elite", menuName = "ScriptableObjects/Unit/Elite", order = 1)]
     public class EliteUnitData : UnitData
     {
         [SerializeField] private Sprite _activeSkillIcon;
@@ -13,7 +13,7 @@ namespace Paradise.Data.Unit
         
         private void Awake()
         {
-            UnitType = UnitType.Hero;
+            UnitType = UnitType.Elite;
         }
     }
 }

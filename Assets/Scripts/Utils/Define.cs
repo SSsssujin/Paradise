@@ -2,8 +2,9 @@ namespace Paradise
 {
     public enum UnitType
     {
+        None = -1,
         Basic,
-        Hero
+        Elite
     }
 
     public enum StarRank
@@ -49,6 +50,14 @@ namespace Paradise
         EndDrag,
     }
 
+    public enum TileState
+    {
+        Empty, 
+        Touched, 
+        Occupied
+    }
+
+
     public struct TileName
     {
         public const string Ground = "Ground";
@@ -56,5 +65,11 @@ namespace Paradise
         public const string Obstacle = "Obstacle";
         public const string Gold = "Gold";
         public const string Sliver = "Sliver";
+    }
+
+    public struct MaxCount
+    {
+        public const int Elite = 3;
+        public const int Basic = 5;
     }
 }

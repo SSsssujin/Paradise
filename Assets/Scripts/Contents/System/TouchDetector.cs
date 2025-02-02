@@ -1,4 +1,7 @@
+using System;
+using Paradise.Battle;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Paradise
@@ -21,13 +24,15 @@ namespace Paradise
             _playerInput = gameObject.FetchComponent<PlayerInput>();
 
             // Listener
-            _playerInput.onActionTriggered += inputActionTriggered;
+            _playerInput.onActionTriggered += InputActionTriggered;
         }
             
-        private void inputActionTriggered(InputAction.CallbackContext context)
+        private void InputActionTriggered(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
+                if (EventSystem.current.IsPointerOverGameObject()) return;
+                
                 Vector2 touchPosition = Utils.GetTouchPosition();
                 Vector2 touchedScreenPoint = _camera.ScreenToWorldPoint(touchPosition);
 
@@ -36,12 +41,11 @@ namespace Paradise
                     Mathf.Infinity,
                     layerMask: _targetLayers);
 
-                // 수정?
                 if (hit.collider != null)
                 {
-                    if (hit.collider.TryGetComponent<Battle.MapTile>(out var tile))
+                    if (hit.collider.TryGetComponent<MapTile>(out var tile))
                     {
-                        tile.Selected();
+                        MapTileTouched?.Invoke(tile);
                     }
                 }
             }
@@ -49,7 +53,9 @@ namespace Paradise
 
         private void OnDestroy()
         {
-            _playerInput.onActionTriggered -= inputActionTriggered;
+            _playerInput.onActionTriggered -= InputActionTriggered;
         }
+        
+        public event Action<MapTile> MapTileTouched;
     }
 }

@@ -3,6 +3,7 @@ using Paradise.Data.Unit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 using Toggle = UnityEngine.UI.Toggle;
 
@@ -11,8 +12,6 @@ namespace Paradise.UI
     public partial class UI_UnitPanel : UI_Base
     {
         private ScrollRect _unitList;
-        private ScrollRect _statInfo;
-        
         private UnitData _selectedUnitData;
         
         private List<Toggle> _unitToggles = new();
@@ -22,19 +21,17 @@ namespace Paradise.UI
             if (!base._Initialize())
                 return false;
            
-            // Bind
             BindObject(typeof(GameObjects));
             BindText(typeof(Texts));
-            BindButton(typeof(Buttons));
+            BindScrollRect(typeof(ScrollRects));
             BindToggle(typeof(Toggles));
+            BindImage(typeof(Images));
             
-            BindEvent(GetObject((int)GameObjects.BasicUnit), () => SwitchUnitContent(0));
-            BindEvent(GetObject((int)GameObjects.EliteUnit), () => SwitchUnitContent(1));
+            BindEvent(GetObject((int)GameObjects.UnitListBasicToggle), () => SwitchUnitContent(UnitType.Basic));
+            BindEvent(GetObject((int)GameObjects.UnitListEliteToggle), () => SwitchUnitContent(UnitType.Elite));
             BindEvent(GetObject((int)GameObjects.CancelButton), () => GameManager.UI.ClosePopup());
 
-            // Caching
-            _unitList = GetObject((int)GameObjects.UnitList).FetchComponent<ScrollRect>();
-            _statInfo = GetObject((int)GameObjects.StatInfo).FetchComponent<ScrollRect>();
+            _unitList = GetScrollRect((int)ScrollRects.UnitListScrollRect);
             
             RefreshUnitList();
             
@@ -43,15 +40,22 @@ namespace Paradise.UI
 
         protected override void OnShow()
         {
-            GetToggle((int)Toggles.BasicUnit).isOn = true;
+            GetToggle((int)Toggles.UnitListBasicToggle).isOn = true;
             _unitToggles.ForEach(x => x.isOn = false);
             _unitToggles[0].isOn = true;
             SwitchUnitContent(0);
+            ResetScrollRect();
         }
         
         protected override void OnHide()
         {
 
+        }
+
+        private void ResetScrollRect()
+        {
+            GetScrollRect((int)ScrollRects.ActiveSkillScrollRect).verticalNormalizedPosition = 1f;
+            GetScrollRect((int)ScrollRects.PassiveSkillScrollRect).verticalNormalizedPosition = 1f;
         }
 
         private void RefreshUnitList()
@@ -71,12 +75,13 @@ namespace Paradise.UI
             SwitchUnitContent(0);
         }
 
-        private void SwitchUnitContent(int unitIndex)
+        private void SwitchUnitContent(UnitType unitIndex)
         {
+            // Toggle 0 : Basic, 1 : Elite
             int childCount = _unitList.viewport.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                bool isMyIndex = unitIndex == i;
+                bool isMyIndex = (int)unitIndex == i;
                 var unitContent = _unitList.viewport.GetChild(i);
                 var canvasGroup = unitContent.FetchComponent<CanvasGroup>();
                 canvasGroup.alpha = System.Convert.ToInt32(isMyIndex);
@@ -91,82 +96,68 @@ namespace Paradise.UI
             {
                 _selectedUnitData = data;
 
-                _GetText(GetObject((int)GameObjects.Hp)).text = $"{data.Hp}";
-                _GetText(GetObject((int)GameObjects.Attack)).text = $"{data.AttackPower}";
-                _GetText(GetObject((int)GameObjects.AttackRange)).text = $"{data.AttackRange}";
-                _GetText(GetObject((int)GameObjects.Speed)).text = $"{data.AttackSpeed}";
-                _GetText(GetObject((int)GameObjects.Cost)).text = $"{data.Price}";
-
-                var activeSkill = GetObject((int)GameObjects.Skill).transform.Find("Active").gameObject;
+                GetText((int)Texts.StatHpText).text = $"{data.Hp}";
+                GetText((int)Texts.StatAttackText).text = $"{data.AttackPower}";
+                GetText((int)Texts.StatAttackRangeText).text = $"{data.AttackRange}";
+                GetText((int)Texts.StatSpeedText).text = $"{data.AttackSpeed}";
+                GetText((int)Texts.StatCostText).text= $"{data.Cost}";
+                GetText((int)Texts.PassiveSkillDescriptionText).text = data.PassiveSkillDescription;
+                GetImage((int)Images.PassiveSkillImage).sprite = data.PassiveSkillIcon;
+                
+                var activeSkill = GetObject((int)GameObjects.ActiveSkillObject);
                 activeSkill.SetActive(false);
                 
-                GetObject((int)GameObjects.Skill).transform
-                    .Find("Passive")
-                    .Find("Icon")
-                    .FetchComponent<Image>()
-                    .sprite = data.PassiveSkillIcon;
-                GetText((int)Texts.SkillDescription).text = data.PassiveSkillDescription;
-                
-                if (data is EliteUnitData)
+                if (data is EliteUnitData eliteUnitData)
                 {
                     activeSkill.SetActive(true);
-                    EliteUnitData eliteUnitData = data as EliteUnitData;
-                    activeSkill.transform
-                        .Find("Icon")
-                        .FetchComponent<Image>()
-                        .sprite = eliteUnitData.ActiveSkillIcon;
+                    GetImage((int)Images.ActiveSkillImage).sprite = eliteUnitData.ActiveSkillIcon;
+                    GetText((int)Texts.ActiveSkillDescriptionText).text  = eliteUnitData.ActiveSkillDescription;
                 }
-
-                
-            }
-
-            TextMeshProUGUI _GetText(GameObject origin)
-            {
-                return origin.transform.Find("Value").FetchComponent<TextMeshProUGUI>();
+                ResetScrollRect();
             }
         }
-
     }
 
     public partial class UI_UnitPanel
     {
         enum GameObjects
         {
-            // ScrollRects
-            UnitList,
-            StatInfo,
-            
-            // Toggles
-            BasicUnit,
-            EliteUnit,
-            
-            // Stats
-            Hp,
-            Attack,
-            AttackRange,
-            Speed,
-            Cost,
-            Skill,
-            SkillDescription,
-            
-            // Buttons
+            UnitListBasicToggle,
+            UnitListEliteToggle,
             CancelButton,
+            ActiveSkillObject,
+        }
+
+        enum Images
+        {
+            PassiveSkillImage,
+            ActiveSkillImage,
         }
 
         enum Texts
         {
-            SkillDescription,
+            // Stats
+            StatHpText,
+            StatAttackText,
+            StatAttackRangeText,
+            StatSpeedText,
+            StatCostText,
+            // Skill descriptions
+            PassiveSkillDescriptionText,
+            ActiveSkillDescriptionText,
         }
 
-        enum Buttons
+        enum ScrollRects
         {
-            
+            PassiveSkillScrollRect,
+            ActiveSkillScrollRect,
+            UnitListScrollRect,
         }
 
         enum Toggles
         {
-            BasicUnit,
-            EliteUnit,
+            UnitListBasicToggle,
+            UnitListEliteToggle,
         }
     }
 }

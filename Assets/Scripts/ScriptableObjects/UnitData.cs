@@ -1,3 +1,5 @@
+using System;
+using Paradise.Battle;
 using UnityEngine;
 
 namespace Paradise.Data.Unit
@@ -7,7 +9,8 @@ namespace Paradise.Data.Unit
         [Header("Info")] 
         [SerializeField] private string _name;
         [SerializeField] private string _description;
-        [SerializeField] private int _price;
+        [SerializeField] private int _cost;
+        [SerializeField] private string _key;
 
         [Space] 
         
@@ -28,27 +31,27 @@ namespace Paradise.Data.Unit
         [Space] 
         
         [Header("Skill")] 
-        [SerializeField] private string _skillKey;
         [SerializeField] private Sprite _passiveSkillIcon;
         [SerializeField] [TextArea(3, 10)] private string _passiveSkillDescription;
 
         private void OnEnable()
         {
-            _skillKey = _name;
+            _key = name;
         }
 
-        //public PlayerUnit CreateInstance(MapTileBase currentTileBase)
-        //{
-        //    Transform contentTr = FindObjectOfType<GamePlayContent>().transform;
-        //    PlayerUnit unit = Instantiate(_model, contentTr).GetComponent<PlayerUnit>();
-        //    unit.Create(this, currentTileBase);
-        //    return unit;
-        //}
-
+        public PlayerUnit CreateInstance(MapTile targetTile)
+        {
+            string key = $"{UnitType}/{_key}.prefab";
+            var unit = GameManager.Resource.Instantiate(key).FetchComponent<PlayerUnit>();
+            unit.Create(this, targetTile);
+            return unit;
+        }
+        
         public UnitType UnitType { get; protected set; }
         
         public string Name => _name;
         public string Description => _description;
+        public string Key => _key;
 
         // Stat
         public float Hp => _hp;
@@ -59,12 +62,11 @@ namespace Paradise.Data.Unit
         public StarRank StarRank => _starRank;
         
         // Object
-        public int Price => _price;
+        public int Cost => _cost;
         public Sprite Portrait => _portrait;
         public GameObject Model => _model;
 
         // Skill
-        public string SkillKey => _skillKey;
         public Sprite PassiveSkillIcon => _passiveSkillIcon;
         public string PassiveSkillDescription => _passiveSkillDescription;
     }

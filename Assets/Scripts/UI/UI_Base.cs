@@ -60,12 +60,14 @@ namespace Paradise.UI
         protected void BindText(Type type) { Bind<TMP_Text>(type); }
         protected void BindButton(Type type) { Bind<Button>(type); }
         protected void BindToggle(Type type) { Bind<Toggle>(type); }
+        protected void BindScrollRect(Type type) { Bind<ScrollRect>(type); }
 
         protected GameObject GetObject(int idx) { return Get<GameObject>(idx); }
         protected TMP_Text GetText(int idx) { return Get<TMP_Text>(idx); }
         protected Button GetButton(int idx) { return Get<Button>(idx); }
         protected Image GetImage(int idx) { return Get<Image>(idx); }
         protected Toggle GetToggle(int idx) { return Get<Toggle>(idx); }
+        protected ScrollRect GetScrollRect(int idx) { return Get<ScrollRect>(idx); }
         
         private void Bind<T>(Type type) where T : Object
         {
