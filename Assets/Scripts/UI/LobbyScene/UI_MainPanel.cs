@@ -35,7 +35,7 @@ namespace Paradise
         private void _AddListener()
         {
             var characterButton = GetObject((int)GameObjects.Character);
-            BindEvent(characterButton, () => GameManager.UI.ShowPopup<UI_UnitPanel>());
+            BindEvent(characterButton, () => Manager.UI.ShowPopup<UI_UnitPanel>());
         }
     }
 }

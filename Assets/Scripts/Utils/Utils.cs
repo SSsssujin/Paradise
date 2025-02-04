@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -55,6 +57,17 @@ namespace Paradise
             if (component == null)
                 component = go.AddComponent<T>();
             return component;
+        }
+
+        public static int GetMaxCount(UnitType type)
+        {
+            int count = type switch
+            {
+                UnitType.Basic => MaxCount.Basic,
+                UnitType.Elite => MaxCount.Elite,
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+            return count;
         }
     }
 }

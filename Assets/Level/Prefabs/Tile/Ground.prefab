@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 5986541791362470269, guid: e4c56775954460b4abf75b2c2d607f16, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986541791362470269, guid: e4c56775954460b4abf75b2c2d607f16, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -2095732293
+      objectReference: {fileID: 0}
     - target: {fileID: 6946235731191651520, guid: e4c56775954460b4abf75b2c2d607f16, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

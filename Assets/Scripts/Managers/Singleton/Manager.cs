@@ -6,8 +6,9 @@ using UnityEngine;
 
 namespace Paradise
 {
-    public class GameManager : Singleton<GameManager>
+    public class Manager : Singleton<Manager>
     {
+        private readonly GameManager _game = new();
         private readonly ResourceManager _resource = new();
         private readonly UIManager _ui = new();
 
@@ -34,6 +35,7 @@ namespace Paradise
             return party;
         }
 
+        public static GameManager Game => Instance._game;
         public static ResourceManager Resource => Instance._resource;
         public static UIManager UI => Instance._ui;
     }

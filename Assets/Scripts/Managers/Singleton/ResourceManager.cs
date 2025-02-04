@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,11 +9,35 @@ namespace Paradise
 {
     public class ResourceManager
     {
+        private List<GameObject> _instantiatedAssets = new();
+        
+        // 로드 & 생성
         public GameObject Instantiate(string key, Transform parent = null)
         {
             GameObject go = Addressables.InstantiateAsync(key).WaitForCompletion();
             if (parent != null) go.transform.SetParent(parent);
+            _instantiatedAssets.Add(go);
             return go;
+        }
+
+        // Preload들 생성
+        public void Instantiate()
+        {
+            
+        }
+        
+        public void Destroy(GameObject loadedAsset)
+        {
+            var usedObj = _instantiatedAssets.Find(x => x == loadedAsset);
+            if (usedObj != null)
+            {
+                _instantiatedAssets.Remove(usedObj);
+                Addressables.ReleaseInstance(usedObj);
+            }
+            else
+            {
+                Debug.LogError($"Can't find [{loadedAsset.name}]. Check before if it is instantiated.");
+            }
         }
 
         public void LoadScene(string sceneAddress)

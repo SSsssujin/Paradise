@@ -29,7 +29,7 @@ namespace Paradise.UI
             
             BindEvent(GetObject((int)GameObjects.UnitListBasicToggle), () => SwitchUnitContent(UnitType.Basic));
             BindEvent(GetObject((int)GameObjects.UnitListEliteToggle), () => SwitchUnitContent(UnitType.Elite));
-            BindEvent(GetObject((int)GameObjects.CancelButton), () => GameManager.UI.ClosePopup());
+            BindEvent(GetObject((int)GameObjects.CancelButton), () => Manager.UI.ClosePopup());
 
             _unitList = GetScrollRect((int)ScrollRects.UnitListScrollRect);
             
@@ -60,11 +60,11 @@ namespace Paradise.UI
 
         private void RefreshUnitList()
         {
-            foreach (var unit in GameManager.Instance.UnitList)
+            foreach (var unit in Manager.Instance.UnitList)
             {
                 int index = unit is BasicUnitData ? 0 : 1;
                 Transform parent = _unitList.viewport.GetChild(index);
-                var toggle = GameManager.Resource.Instantiate("UnitCard").FetchComponent<Toggle>();
+                var toggle = Manager.Resource.Instantiate("UnitCard").FetchComponent<Toggle>();
                 toggle.transform.SetParent(parent);
                 toggle.transform.ResetLocal();
                 toggle.group = _unitList.viewport.FetchComponent<ToggleGroup>();

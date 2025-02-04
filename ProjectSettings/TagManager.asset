@@ -38,7 +38,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Edge
+  - name: Tile
     uniqueID: 2199235003
     locked: 0
   - name: Default

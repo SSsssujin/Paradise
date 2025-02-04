@@ -24,5 +24,6 @@ MonoBehaviour:
   _starRank: 0
   _portrait: {fileID: 403208247147482157, guid: 07ca090de5bf8454db5b421fe9916174, type: 3}
   _model: {fileID: 0}
-  _passiveSkillIcon: {fileID: 0}
-  _passiveSkillDescription: 
+  _passiveSkillIcon: {fileID: 21300000, guid: 51dcbb3542a768b49ac5942bd2a0c8bb, type: 3}
+  _passiveSkillDescription: "\uACF5\uACA9\uD560 \uB54C\uB9C8\uB2E4 \uB300\uC0C1\uC5D0\uAC8C
+    \u2018\uD654\uC0C1\u2019 \uB514\uBC84\uD504\uB97C \uBD80\uC5EC\uD55C\uB2E4."

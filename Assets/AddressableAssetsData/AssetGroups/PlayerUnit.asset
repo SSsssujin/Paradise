@@ -14,12 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: PlayerUnit
   m_GUID: 73a8d7f4970e7d84a9cf6aa014f76ad6
-  m_SerializeEntries:
-  - m_GUID: 7062f74aa2f970a44beed801d1c4ea49
-    m_Address: Elite
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4beb07068b3258b4ebe2d98efa9ef9fb, type: 2}
   m_SchemaSet:

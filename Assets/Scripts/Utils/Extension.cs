@@ -32,5 +32,14 @@ namespace Paradise
             origin.localRotation = Quaternion.identity;
             origin.localScale = Vector3.one;
         }
+        
+        public static void ResetLocal2D(this Transform origin)
+        {
+            Vector3 position = Vector3.zero;
+            position.z = -1;
+            origin.localPosition = position;
+            origin.localRotation = Quaternion.identity;
+            origin.localScale = Vector3.one;
+        }
     }
 }

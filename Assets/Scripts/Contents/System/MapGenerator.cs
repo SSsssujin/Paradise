@@ -42,7 +42,7 @@ namespace Paradise.Battle
                     Vector3Int localPosition = new Vector3Int(x + bounds.xMin, y + bounds.yMin, 0);
                     Vector3 worldPosition = tilemap.CellToWorld(localPosition) + tilemap.cellSize / 2.0f;
 
-                    GameObject tileObject = GameManager.Resource.Instantiate(tile.name, TileViewer);
+                    GameObject tileObject = Manager.Resource.Instantiate(tile.name, TileViewer);
                     tileObject.name = $"[{x}, {y}]";
                     tileObject.transform.position = worldPosition;
                 }

@@ -39,12 +39,10 @@ namespace Paradise.Data.Unit
             _key = name;
         }
 
-        public PlayerUnit CreateInstance(MapTile targetTile)
+        public PlayerUnit CreateInstance()
         {
             string key = $"{UnitType}/{_key}.prefab";
-            var unit = GameManager.Resource.Instantiate(key).FetchComponent<PlayerUnit>();
-            unit.Create(this, targetTile);
-            return unit;
+            return Manager.Resource.Instantiate(key).FetchComponent<PlayerUnit>();
         }
         
         public UnitType UnitType { get; protected set; }

@@ -6,11 +6,10 @@ namespace Paradise.Battle
 {
     public class MapTile : MonoBehaviour
     {
-        private bool _isSelected;
-
         private Color _originColor;
         private SpriteRenderer _spriteRenderer;
-        private PlayerUnit _deployedPlayerUnit;
+        
+        private PlayerUnit _playerUnit;
 
         private void Start()
         {
@@ -18,49 +17,42 @@ namespace Paradise.Battle
             _originColor = _spriteRenderer.color;
         }
 
-        public void SetState(TileState state)
+        public void Selected()
         {
-            State = state;
-            SetState();
-        }
-
-        private void SetState()
-        {
-            switch (State)
-            {
-                case TileState.Empty:
-                    Released();
-                    break;
-                case TileState.Touched:
-                    Selected();
-                    break;
-                case TileState.Occupied:
-                    break;
-                default:
-                    Debug.LogError("Undefined state : " + State);
-                    break;
-            }
-        }
-
-        public void CreateUnit(UnitData data)
-        {
-            _deployedPlayerUnit = data.CreateInstance(this);
-        }
-
-        private void Selected()
-        {
-            _isSelected = true;
             _spriteRenderer.color = Color.red;
-            State = TileState.Occupied;
         }
 
-        private void Released()
+        public void Released()
         {
-            _isSelected = false;
             _spriteRenderer.color = _originColor;
-            State = TileState.Empty;
+        }
+        
+        public void PreviewUnit(UnitData data)
+        {
+            _playerUnit = data.CreateInstance();
+            _playerUnit.Show(data, this);
+        }
+        
+        public void CreateUnit()
+        {
+            _playerUnit.Create();
+            CurrentState = TileState.Occupied;
         }
 
-        public TileState State { get; private set; }
+        public void DestroyUnit()
+        {
+            // 가끔 여기 들어오는부분 고치기
+            if (_playerUnit is null)
+            {
+                Debug.Log("No unit on the tile"); 
+                return;
+            }
+            
+            _playerUnit.Destroy();
+            _playerUnit = null;
+            CurrentState = TileState.Empty;
+        }
+
+        public TileState CurrentState { get; private set; }
     }
 }

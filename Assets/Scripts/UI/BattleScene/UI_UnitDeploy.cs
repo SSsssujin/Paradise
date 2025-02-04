@@ -9,10 +9,18 @@ namespace Paradise.UI
 {
     public class UI_UnitDeploy : UI_Base
     {
+        private struct UnitButton
+        {
+            public bool IsTouched;
+            public Image Image;
+            public Button Button;
+            public GameObject ConfirmMarker;
+        }
+        
         enum GameObjects
         {
             UnitDeployCancelPanel,
-            GradeSelectButtonList,
+            GradeSelectButtons,
             BasicUnitSelectButtons,
             EliteUnitSelectButtons,
             
@@ -20,9 +28,14 @@ namespace Paradise.UI
             BasicUnitButton,
         }
 
-        private TouchDetector _touchDetector;
-        private MapTile _selectedTile;
+        private bool _isPreviewing;
 
+        private MapTile _selectedTile;
+        private TouchDetector _touchDetector;
+        private UnitButton? _previousSelectedButton;
+        
+        private readonly Dictionary<UnitType, UnitButton[]> _unitButtons = new();
+        
         protected override bool _Initialize()
         {
             if (!base._Initialize())
@@ -32,44 +45,52 @@ namespace Paradise.UI
             
             BindObject(typeof(GameObjects));
 
-            BindEvent(GetObject((int)GameObjects.UnitDeployCancelPanel), DeselectTile);
-            BindEvent(GetObject((int)GameObjects.BasicUnitButton), () => ActivateUnitList(UnitType.Basic));
-            BindEvent(GetObject((int)GameObjects.EliteUnitButton), () => ActivateUnitList(UnitType.Elite));
+            BindEvent(GetObject((int)GameObjects.UnitDeployCancelPanel), OnCancelPanelTouched);
+            BindEvent(GetObject((int)GameObjects.BasicUnitButton), () => ActivateUnitSelectionUI(UnitType.Basic));
+            BindEvent(GetObject((int)GameObjects.EliteUnitButton), () => ActivateUnitSelectionUI(UnitType.Elite));
 
             _touchDetector = FindAnyObjectByType<TouchDetector>();
             _touchDetector.MapTileTouched += OnTileSelected;
             
-            InitializeUnitSelectButtons();
-            DeactivateAll();
+            InitializeUnitButtons(UnitType.Basic);
+            InitializeUnitButtons(UnitType.Elite);
             
+            DeactivateAll();
             return true;
         }
 
-        // 수정
-        private void InitializeUnitSelectButtons()
+        private void InitializeUnitButtons(UnitType unitType)
         {
-            // 1. BasicUnitButtons
-            if (GameManager.Instance.GetCurrentPartyList(UnitType.Basic) is not IReadOnlyList<UnitData> party) return;
-            var basicUnitButtonList = GetObject((int)GameObjects.BasicUnitSelectButtons).transform;
-            int index = 0;
-            foreach (var unit in party)
+            if (!_unitButtons.ContainsKey(unitType))
             {
-                basicUnitButtonList.GetChild(index).Find("Image").FetchComponent<Image>().sprite = unit.Portrait;
-                basicUnitButtonList.GetChild(index).FetchComponent<Button>().onClick
-                    .AddListener(() => CreateUnit(unit));
-                index++;
+                _unitButtons.Add(unitType, new UnitButton[Utils.GetMaxCount(unitType)]);
             }
 
-            // 2. EliteUnitButtons
-            party = (IReadOnlyList<UnitData>)GameManager.Instance.GetCurrentPartyList(UnitType.Elite);
-            var eliteUnitButtonList = GetObject((int)GameObjects.EliteUnitSelectButtons).transform;
-            index = 0;
-            foreach (var unit in party)
+            Transform root = GetUnitSelectionUI(unitType).transform;
+
+            for (int i = 0; i < root.childCount; i++)
             {
-                eliteUnitButtonList.GetChild(index).Find("Image").FetchComponent<Image>().sprite = unit.Portrait;
-                eliteUnitButtonList.GetChild(index).FetchComponent<Button>().onClick
-                    .AddListener(() => CreateUnit(unit));
-                index++;
+                var unitButtonRoot = root.GetChild(i);
+                UnitButton unitButton = new UnitButton()
+                {
+                    Image = unitButtonRoot.Find("Image").FetchComponent<Image>(),
+                    Button = unitButtonRoot.FetchComponent<Button>(),
+                    ConfirmMarker = unitButtonRoot.Find("Confirm").gameObject
+                };
+                _unitButtons[unitType][i] = unitButton;
+            }
+            
+            if (Manager.Instance.GetCurrentPartyList(unitType) is not IReadOnlyList<UnitData> party) return;
+            
+            for (int index = 0; index < party.Count; index++)
+            {
+                var unit = party[index];
+                var unitButton = _unitButtons[unitType][index];
+                unitButton.Image.sprite = unit.Portrait;
+                unitButton.Button.onClick.AddListener(() =>
+                {
+                    OnUnitButtonTouched(unitButton, unit);
+                });
             }
         }
 
@@ -78,53 +99,91 @@ namespace Paradise.UI
             gameObject.SetActive(true);
             GetObject((int)GameObjects.UnitDeployCancelPanel).SetActive(true);
             
-            var currentTileState = tile.State;
+            var tileState = tile.CurrentState;
             _selectedTile = tile;
+            _selectedTile.Selected();
 
-            if (currentTileState == TileState.Empty)
+            if (tileState == TileState.Empty)
             {
-                _selectedTile.SetState(TileState.Touched);
-                GetObject((int)GameObjects.GradeSelectButtonList).SetActive(true);
+                GetObject((int)GameObjects.GradeSelectButtons).SetActive(true);
             }
-            else
+            else if (tileState == TileState.Occupied)
             {
                 
             }
         }
 
-        private void DeselectTile()
+        private GameObject GetUnitSelectionUI(UnitType unitType)
         {
-            _selectedTile.SetState(TileState.Empty);
-            _selectedTile = null;
-            DeactivateAll();
-            gameObject.SetActive(false);
-        }
-
-        private void ActivateUnitList(UnitType unitType)
-        {
-            GetObject((int)GameObjects.GradeSelectButtonList).SetActive(false);
             GameObjects list = unitType switch
             {
                 UnitType.Basic => GameObjects.BasicUnitSelectButtons,
                 UnitType.Elite => GameObjects.EliteUnitSelectButtons,
                 _ => throw new ArgumentOutOfRangeException(nameof(unitType), unitType, null)
             };
-            GetObject((int)list).SetActive(true);
+            return GetObject((int)list);
         }
 
-        private void CreateUnit(UnitData data)
+        private void ActivateUnitSelectionUI(UnitType unitType)
         {
-            _selectedTile.CreateUnit(data);
-            DeselectTile();
-            DeactivateAll();   
+            GetObject((int)GameObjects.GradeSelectButtons).SetActive(false);
+            GetUnitSelectionUI(unitType).SetActive(true);
         }
 
+        private void OnCancelPanelTouched()
+        {
+            if (_isPreviewing)
+            {
+                _selectedTile.DestroyUnit();
+            }
+            DeselectTile();
+            DeactivateAll();
+            gameObject.SetActive(false);
+            _isPreviewing = false;
+            _previousSelectedButton = null;
+        }
+
+        private void DeselectTile()
+        {
+            _selectedTile.Released();
+            _selectedTile = null;
+        }
+
+        private void OnUnitButtonTouched(UnitButton button, UnitData data)
+        {
+            // First touch
+            if (!button.Equals(_previousSelectedButton))
+            {
+                // Delete previous info
+                if (_previousSelectedButton.HasValue)
+                {
+                    _selectedTile.DestroyUnit();
+                    _previousSelectedButton?.ConfirmMarker.SetActive(false);
+                }
+                button.ConfirmMarker.SetActive(true);
+                _selectedTile.PreviewUnit(data);
+                _isPreviewing = true;
+                _previousSelectedButton = button;
+            }
+            // Second touch
+            else
+            {
+                _selectedTile.CreateUnit();
+                _isPreviewing = false;
+                DeselectTile();
+                DeactivateAll();
+                _previousSelectedButton = null;
+            }
+        }
+        
         private void DeactivateAll()
         {
+            _previousSelectedButton?.ConfirmMarker.SetActive(false);
             GetObject((int)GameObjects.UnitDeployCancelPanel).SetActive(false);
-            GetObject((int)GameObjects.GradeSelectButtonList).SetActive(false);
+            GetObject((int)GameObjects.GradeSelectButtons).SetActive(false);
             GetObject((int)GameObjects.BasicUnitSelectButtons).SetActive(false);
             GetObject((int)GameObjects.EliteUnitSelectButtons).SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }
