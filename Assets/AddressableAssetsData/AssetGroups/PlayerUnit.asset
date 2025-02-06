@@ -14,7 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: PlayerUnit
   m_GUID: 73a8d7f4970e7d84a9cf6aa014f76ad6
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 583fa4940c63e7b42ace98aeabf8327a
+    m_Address: MyDay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bdd23a8c0acf23545b5fc066695f8da8
+    m_Address: WeDay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c52e1d2d861fda242bd219b3eb80be89
+    m_Address: Alexis
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee0cc5dd5456b19479c40e1a3106075d
+    m_Address: Flame
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4beb07068b3258b4ebe2d98efa9ef9fb, type: 2}
   m_SchemaSet:

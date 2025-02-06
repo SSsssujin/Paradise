@@ -7,7 +7,9 @@ namespace Paradise
     {
         enum GameObjects
         {
-            Character,
+            PlayerUnit,
+            Party,
+            Recruit,
         }
         
         enum Buttons
@@ -19,14 +21,13 @@ namespace Paradise
             Setting,
         }
         
-        protected override bool _Initialize()
+        protected override bool Initialize()
         {
-            if (!base._Initialize())
+            if (!base.Initialize())
                 return false;
 
             // Caching
             BindObject(typeof(GameObjects));
-            BindButton(typeof(Buttons));
             
             _AddListener();
             return true;
@@ -34,8 +35,13 @@ namespace Paradise
 
         private void _AddListener()
         {
-            var characterButton = GetObject((int)GameObjects.Character);
-            BindEvent(characterButton, () => Manager.UI.ShowPopup<UI_UnitPanel>());
+            GameObject button;
+            button = GetObject((int)GameObjects.PlayerUnit);
+            BindEvent(button, () => Manager.UI.ShowPopup<UI_UnitPanel>());
+            
+            button = GetObject((int)GameObjects.Party);
+            BindEvent(button, () => Manager.UI.ShowPopup<UI_Party>());
+            
         }
     }
 }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5eb3bf296833d42a9a5283efb932b7, type: 3}
+  m_Name: Flame
+  m_EditorClassIdentifier: 
+  _name: "\uD50C\uB808\uC784"
+  _description: 
+  _cost: 10
+  _key: Flame
+  _hp: 100
+  _attackPower: 50
+  _attackRange: 2
+  _attackSpeed: 3
+  _element: 0
+  _starRank: 0
+  _portrait: {fileID: 403208247147482157, guid: 07ca090de5bf8454db5b421fe9916174, type: 3}
+  _model: {fileID: 0}
+  _passiveSkillIcon: {fileID: 21300000, guid: 51dcbb3542a768b49ac5942bd2a0c8bb, type: 3}
+  _passiveSkillDescription: "\uACF5\uACA9\uD560 \uB54C\uB9C8\uB2E4 \uB300\uC0C1\uC5D0\uAC8C
+    \u2018\uD654\uC0C1\u2019 \uB514\uBC84\uD504\uB97C \uBD80\uC5EC\uD55C\uB2E4."

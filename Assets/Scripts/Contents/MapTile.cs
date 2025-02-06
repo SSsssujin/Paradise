@@ -41,7 +41,6 @@ namespace Paradise.Battle
 
         public void DestroyUnit()
         {
-            // 가끔 여기 들어오는부분 고치기
             if (_playerUnit is null)
             {
                 Debug.Log("No unit on the tile"); 

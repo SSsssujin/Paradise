@@ -19,7 +19,7 @@ namespace Paradise
         private async void Start()
         {
             //Resource.LoadScene("BattleScene");
-            
+            Game.Initialize();
             await UI.Initialize();
         }
 

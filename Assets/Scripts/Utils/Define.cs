@@ -71,5 +71,7 @@ namespace Paradise
     {
         public const int Elite = 3;
         public const int Basic = 5;
+
+        public const int Party = 5;
     }
 }

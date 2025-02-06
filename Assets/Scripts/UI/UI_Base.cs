@@ -21,10 +21,10 @@ namespace Paradise.UI
         public bool Load()
         {
             gameObject.SetActive(_isOpened);
-            return _Initialize();
+            return Initialize();
         }
 
-        protected virtual bool _Initialize()
+        protected virtual bool Initialize()
         {
             if (_isInit)
                 return false;
@@ -33,6 +33,12 @@ namespace Paradise.UI
             
             _isInit = true;
             return true;
+        }
+
+        protected void ActivateUnitCollectionView(out UnitCollectionView view)
+        {
+            view = Utils.FindChild<UnitCollectionView>(gameObject, recursive: true);
+            view.Initialize();
         }
 
         public void Show()

@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using Paradise.Data.Unit;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
 using Toggle = UnityEngine.UI.Toggle;
 
 namespace Paradise.UI
@@ -12,13 +9,13 @@ namespace Paradise.UI
     public partial class UI_UnitPanel : UI_Base
     {
         private ScrollRect _unitList;
-        private UnitData _selectedUnitData;
+        private UnitCollectionView _unitCollectionView;
         
         private List<Toggle> _unitToggles = new();
         
-        protected override bool _Initialize()
+        protected override bool Initialize()
         {
-            if (!base._Initialize())
+            if (!base.Initialize())
                 return false;
            
             BindObject(typeof(GameObjects));
@@ -27,13 +24,10 @@ namespace Paradise.UI
             BindToggle(typeof(Toggles));
             BindImage(typeof(Images));
             
-            BindEvent(GetObject((int)GameObjects.UnitListBasicToggle), () => SwitchUnitContent(UnitType.Basic));
-            BindEvent(GetObject((int)GameObjects.UnitListEliteToggle), () => SwitchUnitContent(UnitType.Elite));
             BindEvent(GetObject((int)GameObjects.CancelButton), () => Manager.UI.ClosePopup());
 
-            _unitList = GetScrollRect((int)ScrollRects.UnitListScrollRect);
-            
-            RefreshUnitList();
+            ActivateUnitCollectionView(out _unitCollectionView);
+            _unitCollectionView.SetToggleListeners(PrintUnitInfo);
             
             return true;
         }
@@ -41,9 +35,6 @@ namespace Paradise.UI
         protected override void OnShow()
         {
             GetToggle((int)Toggles.UnitListBasicToggle).isOn = true;
-            _unitToggles.ForEach(x => x.isOn = false);
-            _unitToggles[0].isOn = true;
-            SwitchUnitContent(0);
             ResetScrollRect();
         }
         
@@ -58,44 +49,10 @@ namespace Paradise.UI
             GetScrollRect((int)ScrollRects.PassiveSkillScrollRect).verticalNormalizedPosition = 1f;
         }
 
-        private void RefreshUnitList()
-        {
-            foreach (var unit in Manager.Instance.UnitList)
-            {
-                int index = unit is BasicUnitData ? 0 : 1;
-                Transform parent = _unitList.viewport.GetChild(index);
-                var toggle = Manager.Resource.Instantiate("UnitCard").FetchComponent<Toggle>();
-                toggle.transform.SetParent(parent);
-                toggle.transform.ResetLocal();
-                toggle.group = _unitList.viewport.FetchComponent<ToggleGroup>();
-                toggle.transform.Find("Portrait").FetchComponent<Image>().sprite = unit.Portrait;
-                toggle.onValueChanged.AddListener((x) => PrintUnitInfo(x, unit));
-                _unitToggles.Add(toggle);
-            }
-            SwitchUnitContent(0);
-        }
-
-        private void SwitchUnitContent(UnitType unitIndex)
-        {
-            // Toggle 0 : Basic, 1 : Elite
-            int childCount = _unitList.viewport.childCount;
-            for (int i = 0; i < childCount; i++)
-            {
-                bool isMyIndex = (int)unitIndex == i;
-                var unitContent = _unitList.viewport.GetChild(i);
-                var canvasGroup = unitContent.FetchComponent<CanvasGroup>();
-                canvasGroup.alpha = System.Convert.ToInt32(isMyIndex);
-                canvasGroup.interactable = isMyIndex;
-                canvasGroup.blocksRaycasts = isMyIndex;
-            }
-        }
-
         private void PrintUnitInfo(bool isOn, UnitData data)
         {
             if (isOn)
             {
-                _selectedUnitData = data;
-
                 GetText((int)Texts.StatHpText).text = $"{data.Hp}";
                 GetText((int)Texts.StatAttackText).text = $"{data.AttackPower}";
                 GetText((int)Texts.StatAttackRangeText).text = $"{data.AttackRange}";

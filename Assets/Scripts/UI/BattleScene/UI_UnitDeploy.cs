@@ -11,7 +11,6 @@ namespace Paradise.UI
     {
         private struct UnitButton
         {
-            public bool IsTouched;
             public Image Image;
             public Button Button;
             public GameObject ConfirmMarker;
@@ -36,9 +35,9 @@ namespace Paradise.UI
         
         private readonly Dictionary<UnitType, UnitButton[]> _unitButtons = new();
         
-        protected override bool _Initialize()
+        protected override bool Initialize()
         {
-            if (!base._Initialize())
+            if (!base.Initialize())
             {
                 return false;
             }
@@ -112,24 +111,7 @@ namespace Paradise.UI
                 
             }
         }
-
-        private GameObject GetUnitSelectionUI(UnitType unitType)
-        {
-            GameObjects list = unitType switch
-            {
-                UnitType.Basic => GameObjects.BasicUnitSelectButtons,
-                UnitType.Elite => GameObjects.EliteUnitSelectButtons,
-                _ => throw new ArgumentOutOfRangeException(nameof(unitType), unitType, null)
-            };
-            return GetObject((int)list);
-        }
-
-        private void ActivateUnitSelectionUI(UnitType unitType)
-        {
-            GetObject((int)GameObjects.GradeSelectButtons).SetActive(false);
-            GetUnitSelectionUI(unitType).SetActive(true);
-        }
-
+        
         private void OnCancelPanelTouched()
         {
             if (_isPreviewing)
@@ -141,12 +123,6 @@ namespace Paradise.UI
             gameObject.SetActive(false);
             _isPreviewing = false;
             _previousSelectedButton = null;
-        }
-
-        private void DeselectTile()
-        {
-            _selectedTile.Released();
-            _selectedTile = null;
         }
 
         private void OnUnitButtonTouched(UnitButton button, UnitData data)
@@ -174,6 +150,30 @@ namespace Paradise.UI
                 DeactivateAll();
                 _previousSelectedButton = null;
             }
+        }
+
+        private GameObject GetUnitSelectionUI(UnitType unitType)
+        {
+            GameObjects list = unitType switch
+            {
+                UnitType.Basic => GameObjects.BasicUnitSelectButtons,
+                UnitType.Elite => GameObjects.EliteUnitSelectButtons,
+                _ => throw new ArgumentOutOfRangeException(nameof(unitType), unitType, null)
+            };
+            return GetObject((int)list);
+        }
+
+        private void ActivateUnitSelectionUI(UnitType unitType)
+        {
+            GetObject((int)GameObjects.GradeSelectButtons).SetActive(false);
+            GetUnitSelectionUI(unitType).SetActive(true);
+        }
+
+        
+        private void DeselectTile()
+        {
+            _selectedTile.Released();
+            _selectedTile = null;
         }
         
         private void DeactivateAll()

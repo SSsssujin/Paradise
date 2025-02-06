@@ -41,8 +41,8 @@ namespace Paradise.Data.Unit
 
         public PlayerUnit CreateInstance()
         {
-            string key = $"{UnitType}/{_key}.prefab";
-            return Manager.Resource.Instantiate(key).FetchComponent<PlayerUnit>();
+            //string key = $"{UnitType}/{_key}.prefab";
+            return Manager.Resource.Instantiate(_key).FetchComponent<PlayerUnit>();
         }
         
         public UnitType UnitType { get; protected set; }
